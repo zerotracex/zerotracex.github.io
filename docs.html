@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docs – NeuroTrax AI</title>
+    <meta name="description"
+        content="Full documentation for NeuroTrax AI — getting started, data structure, commands, intents, and execution logic." />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #030303;
+            --sidebar-w: 260px;
+            --indigo: #818cf8;
+            --rose: #fb7185;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* ─── Top nav ─── */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 1.5rem;
+            background: rgba(3, 3, 3, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            height: 60px;
+        }
+
+        .topnav-logo {
+            font-size: 1rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--indigo), var(--rose));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .topnav-links {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .topnav-links a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .topnav-links a:hover,
+        .topnav-links a.active {
+            color: #fff;
+        }
+
+        /* ─── Layout ─── */
+        .layout {
+            display: flex;
+            padding-top: 60px;
+            min-height: 100vh;
+        }
+
+        /* ─── Sidebar ─── */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: var(--sidebar-w);
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 2rem 1rem;
+            background: rgba(3, 3, 3, 0.95);
+        }
+
+        .sidebar-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .sidebar-group-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+            padding: 0 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 0.45rem 0.75rem;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: background 0.18s, color 0.18s;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .sidebar-link.active {
+            background: rgba(129, 140, 248, 0.12);
+            color: var(--indigo);
+            font-weight: 500;
+        }
+
+        /* ─── Main content ─── */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            max-width: 860px;
+            padding: 3rem 2.5rem 6rem;
+        }
+
+        /* Section anchors */
+        .doc-section {
+            margin-bottom: 5rem;
+        }
+
+        .doc-section:target h2::before {
+            content: "";
+            display: block;
+            height: 90px;
+            margin-top: -90px;
+            visibility: hidden;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 0.75rem;
+        }
+
+        .h1-gradient {
+            background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.6));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lead {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: 2.5rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            padding-top: 1rem;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 1rem;
+        }
+
+        /* ─── Download button ─── */
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            background: #6366f1;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+        }
+
+        .btn-download:hover {
+            background: #4f46e5;
+            transform: scale(1.02);
+        }
+
+        .btn-download svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ─── Steps ─── */
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding-left: 0.25rem;
+        }
+
+        .step-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .step-list li::before {
+            content: "→";
+            color: var(--indigo);
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* ─── Info card ─── */
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ─── Code blocks ─── */
+        pre {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.09);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.82em;
+            color: #a5b4fc;
+            font-family: 'Courier New', monospace;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: inherit;
+            color: inherit;
+        }
+
+        /* JSON colors */
+        .json-key {
+            color: #93c5fd;
+        }
+
+        .json-str {
+            color: #86efac;
+        }
+
+        .json-num {
+            color: #fca5a5;
+        }
+
+        .json-comment {
+            color: rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        /* ─── Table ─── */
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .doc-table th {
+            text-align: left;
+            padding: 0.7rem 1rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.35);
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .doc-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.65);
+            vertical-align: top;
+        }
+
+        .doc-table td:first-child {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        .doc-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* ─── Badge ─── */
+        .badge-indigo {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(129, 140, 248, 0.15);
+            color: var(--indigo);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-rose {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(251, 113, 133, 0.15);
+            color: #fb7185;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ─── Section divider ─── */
+        .doc-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+            margin: 3.5rem 0;
+        }
+
+        /* ─── Function list ─── */
+        .fn-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .fn-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .fn-name {
+            color: #a5b4fc;
+            font-family: monospace;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .fn-args {
+            color: #fbbf24;
+            font-family: monospace;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .fn-desc {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ─── Steps numbered ─── */
+        .numbered-steps {
+            counter-reset: step;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .num-step {
+            counter-increment: step;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+        }
+
+        .num-step::before {
+            content: counter(step);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(129, 140, 248, 0.15);
+            color: var(--indigo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .num-step-content h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .num-step-content p {
+            margin-bottom: 0;
+            font-size: 0.875rem;
+        }
+
+        /* ─── Mobile ─── */
+        @media(max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 2rem 1.25rem 4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top nav -->
+    <nav class="topnav">
+        <a href="index.html" class="topnav-logo">NeuroTrax AI</a>
+        <div class="topnav-links">
+            <a href="index.html">Home</a>
+            <a href="docs.html" class="active">Docs</a>
+            <a href="license.html">License</a>
+        </div>
+    </nav>
+
+    <div class="layout">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-group-title">Getting Started</div>
+                <a href="#getting-started" class="sidebar-link active" onclick="setActive(this)">Download &amp; Run</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-group-title">Data</div>
+                <a href="#data-structure" class="sidebar-link" onclick="setActive(this)">Data Structure</a>
+                <a href="#file-formats" class="sidebar-link" onclick="setActive(this)">File Formats &amp; Schema</a>
+                <a href="#data-generation" class="sidebar-link" onclick="setActive(this)">Data Generation</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-group-title">Commands</div>
+                <a href="#commands-intents" class="sidebar-link" onclick="setActive(this)">Commands &amp; Intents</a>
+                <a href="#functions" class="sidebar-link" onclick="setActive(this)">Available Functions</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-group-title">Internals</div>
+                <a href="#execution-logic" class="sidebar-link" onclick="setActive(this)">Execution Logic</a>
+            </div>
+        </aside>
+
+        <!-- ── Main ── -->
+        <main class="main">
+
+            <!-- GETTING STARTED -->
+            <section class="doc-section" id="getting-started">
+                <h1><span class="h1-gradient">Getting Started</span></h1>
+                <p class="lead">Get up and running with NeuroTrax AI in seconds. No complex installation required.</p>
+
+                <div class="info-card">
+                    <h2 style="padding-top:0;margin-bottom:1.25rem">Download &amp; Run</h2>
+                    <p style="margin-bottom:1.5rem">Simply download the standalone executable. The AI agent runs locally
+                        on your machine — no Python, no dependencies.</p>
+
+                    <a href="AI.exe" download class="btn-download">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download Agent (AI.exe)
+                    </a>
+
+                    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08)">
+                        <h3>Once downloaded:</h3>
+                        <ul class="step-list" style="margin-top:0.75rem">
+                            <li>Double-click <code>AI.exe</code> to launch.</li>
+                            <li>Accept any Windows security prompts (run anyway) since this is a self-signed
+                                application.</li>
+                            <li>The floating UI will appear on your screen, ready for voice commands.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <div class="doc-divider"></div>
+
+            <!-- DATA STRUCTURE -->
+            <section class="doc-section" id="data-structure">
+                <h2>Data Directory Structure</h2>
+                <p>The <code>data/</code> folder contains JSON files that the system loads at startup. These files
+                    define commands, intents, and indexed system paths.</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Purpose</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>commands.json</code></td>
+                            <td>Hardcoded command mappings (e.g. "exit" → "exit_program")</td>
+                            <td><span class="badge-indigo">Manual</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>intents.json</code></td>
+                            <td>Pattern-based commands with arguments (e.g. "search {query}")</td>
+                            <td><span class="badge-indigo">Manual</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>urls.json</code></td>
+                            <td>Maps site names to URLs (e.g. "google" → "https://google.com")</td>
+                            <td><span class="badge-indigo">Manual</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>search_url.json</code></td>
+                            <td>Search URL templates with <code>{query}</code> placeholder</td>
+                            <td><span class="badge-indigo">Manual</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>apps_list.json</code></td>
+                            <td>Maps app names to executable paths</td>
+                            <td><span class="badge-indigo">Manual</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>files_list.json</code></td>
+                            <td>Maps file names to file paths</td>
+                            <td><span class="badge-rose">Generated</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>folders.json</code></td>
+                            <td>Maps folder names to directory paths</td>
+                            <td><span class="badge-rose">Generated</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>audio_files.json</code></td>
+                            <td>Maps audio file names to file paths</td>
+                            <td><span class="badge-rose">Generated</span></td>
+                        </tr>
+                        <tr>
+                            <td><code>learned.json</code></td>
+                            <td>Stores user corrections and learned aliases</td>
+                            <td><span class="badge-rose">Auto-AI</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <div class="doc-divider"></div>
+
+            <!-- FILE FORMATS -->
+            <section class="doc-section" id="file-formats">
+                <h2>File Formats &amp; Schema</h2>
+
+                <!-- commands.json -->
+                <h3>1. <code>commands.json</code></h3>
+                <p>Defines direct mappings from a spoken phrase to a function name or a sequence of actions.</p>
+
+                <h4>Simple Mapping</h4>
+                <pre><code><span class="json-key">"shutdown neurotrax"</span>: <span class="json-str">"exit_program"</span>,
+<span class="json-key">"play music"</span>: <span class="json-str">"play_songs"</span></code></pre>
+
+                <h4>Complex Mapping (Macros)</h4>
+                <pre><code>{
+  <span class="json-key">"test mode"</span>: {
+    <span class="json-key">"functions"</span>: [<span class="json-str">"play_song"</span>],
+    <span class="json-key">"process_commands"</span>: [<span class="json-str">"open youtube"</span>, <span class="json-str">"set volume to 50"</span>]
+  }
+}</code></pre>
+
+                <!-- intents.json -->
+                <h3 style="margin-top:2.5rem">2. <code>intents.json</code></h3>
+                <p>Defines flexible commands with variable arguments using <code>{variable}</code> placeholders.</p>
+                <pre><code>{
+  <span class="json-key">"search {query} in youtube"</span>: {
+    <span class="json-key">"function"</span>: <span class="json-str">"search_web"</span>,
+    <span class="json-key">"args"</span>: [<span class="json-str">"query"</span>]
+  },
+  <span class="json-key">"open {folder} in code"</span>: {
+    <span class="json-key">"function"</span>: <span class="json-str">"open_in_code"</span>,
+    <span class="json-key">"args"</span>: [<span class="json-str">"folder"</span>]
+  }
+}</code></pre>
+
+                <p>You can keep <strong>default values</strong> in intents. When using defaults the other variable
+                    should be <code>null</code>:</p>
+                <pre><code>{
+  <span class="json-key">"finds {query} in {provider}"</span>: {
+    <span class="json-key">"function"</span>: <span class="json-str">"search_web"</span>,
+    <span class="json-key">"args"</span>: {
+      <span class="json-key">"query"</span>: <span class="json-num">null</span>,
+      <span class="json-key">"provider"</span>: <span class="json-str">"youtube"</span>  <span class="json-comment">// default</span>
+    }
+  }
+}</code></pre>
+
+                <!-- Generated lists -->
+                <h3 style="margin-top:2.5rem">3. Generated Lists (<code>apps_list.json</code> etc.)</h3>
+                <p>Simple key-value pairs: lowercase searchable name → absolute system path.</p>
+                <pre><code>{
+  <span class="json-key">"chrome"</span>: <span class="json-str">"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"</span>,
+  <span class="json-key">"notepad"</span>: <span class="json-str">"C:\\Windows\\System32\\notepad.exe"</span>
+}</code></pre>
+
+                <!-- urls.json -->
+                <h3 style="margin-top:2.5rem">4. <code>urls.json</code> — Simple URLs</h3>
+                <pre><code>{
+  <span class="json-key">"chatgpt"</span>: <span class="json-str">"https://chatgpt.com"</span>,
+  <span class="json-key">"youtube"</span>: <span class="json-str">"https://youtube.com"</span>
+}</code></pre>
+
+                <!-- search_url.json -->
+                <h3 style="margin-top:2.5rem">5. <code>search_url.json</code> — Search Providers</h3>
+                <p>Configure providers for the <code>search_web</code> function.</p>
+                <pre><code>{
+  <span class="json-key">"youtube"</span>: <span class="json-str">"https://www.youtube.com/results?search_query={query}"</span>,
+  <span class="json-key">"google"</span>: <span class="json-str">"https://www.google.com/search?q={query}"</span>
+}</code></pre>
+            </section>
+
+            <div class="doc-divider"></div>
+
+            <!-- DATA GENERATION -->
+            <section class="doc-section" id="data-generation">
+                <h2>Data Generation</h2>
+                <p>
+                    Double-click <code>Data_maker.exe</code> to automatically scan your system and generate the data
+                    files
+                    (<code>files_list.json</code>, <code>folders.json</code>, <code>audio_files.json</code>) in the
+                    <code>/data</code> folder.
+                </p>
+                <p style="color:rgba(255,251,36,0.7);font-size:0.875rem">
+                    💡 Run <code>Data_maker.exe</code> periodically to index newly installed apps and files.
+                </p>
+            </section>
+
+            <div class="doc-divider"></div>
+
+            <!-- COMMANDS & INTENTS -->
+            <section class="doc-section" id="commands-intents">
+                <h2>Commands &amp; Intents Reference</h2>
+                <p>Overview of matching strategies the AI uses when a voice command is received.</p>
+
+                <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem">
+                    <div class="info-card" style="padding:1.25rem 1.5rem;margin-bottom:0">
+                        <h4 style="color:#818cf8;margin-bottom:0.3rem">Direct Match</h4>
+                        <p style="margin-bottom:0;font-size:0.875rem">Checks <code>commands.json</code> and
+                            <code>learned.json</code> for an exact phrase match. Instant execution.
+                        </p>
+                    </div>
+                    <div class="info-card" style="padding:1.25rem 1.5rem;margin-bottom:0">
+                        <h4 style="color:#fbbf24;margin-bottom:0.3rem">Intent Match</h4>
+                        <p style="margin-bottom:0;font-size:0.875rem">Checks <code>intents.json</code> using regex /
+                            fuzzy matching to extract variable arguments (e.g., <em>"set volume to 50%"</em>).</p>
+                    </div>
+                    <div class="info-card" style="padding:1.25rem 1.5rem;margin-bottom:0">
+                        <h4 style="color:#fb7185;margin-bottom:0.3rem">Fuzzy Fallback</h4>
+                        <p style="margin-bottom:0;font-size:0.875rem">Uses <code>fuzzywuzzy</code> to find the closest
+                            match across all indexed apps, files, and songs when no exact match exists.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="doc-divider"></div>
+
+            <!-- FUNCTIONS -->
+            <section class="doc-section" id="functions">
+                <h2>Available Functions</h2>
+                <p>These built-in functions can be referenced in <code>commands.json</code> and
+                    <code>intents.json</code>.
+                </p>
+
+                <div style="overflow-x:auto; border:1px solid rgba(255,255,255,0.08); border-radius:12px;">
+                    <table class="doc-table" style="margin-bottom:0;">
+                        <thead>
+                            <tr>
+                                <th style="padding-left:1.25rem; width:22%;">Function</th>
+                                <th style="width:22%;">Arguments</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding-left:1.25rem;"><code>set_volume</code></td>
+                                <td><span
+                                        style="color:#fbbf24;font-family:'Courier New',monospace;font-size:0.8rem;">value</span>
+                                </td>
+                                <td>Sets the system volume level (0–100)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:1.25rem;"><code>search_web</code></td>
+                                <td><span
+                                        style="color:#fbbf24;font-family:'Courier New',monospace;font-size:0.8rem;">query,
+                                        provider</span></td>
+                                <td>Searches the web; default provider is <em>youtube</em>. Configure providers in
+                                    <code>search_url.json</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:1.25rem;"><code>open_in_code</code></td>
+                                <td><span
+                                        style="color:#fbbf24;font-family:'Courier New',monospace;font-size:0.8rem;">folder</span>
+                                </td>
+                                <td>Resolves folder path from <code>folders.json</code> and opens it in VS Code</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:1.25rem;"><code>find_and_open_in_VS_code</code></td>
+                                <td><span
+                                        style="color:#fbbf24;font-family:'Courier New',monospace;font-size:0.8rem;">folder_name</span>
+                                </td>
+                                <td>Searches for a folder from <code>folders.json</code> and opens it in VS Code</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:1.25rem;"><code>play_in_yt</code></td>
+                                <td><span
+                                        style="color:#fbbf24;font-family:'Courier New',monospace;font-size:0.8rem;">query</span>
+                                </td>
+                                <td>Searches YouTube, selects the first result, and opens it in the browser</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:1.25rem;"><code>shutdown_computer</code></td>
+                                <td><span
+                                        style="color:#fbbf24;font-family:'Courier New',monospace;font-size:0.8rem;">countdown</span>
+                                </td>
+                                <td>Asks for confirmation before shutdown; cancellable during the countdown</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:1.25rem;"><code>exit_program</code></td>
+                                <td><span style="color:rgba(255,255,255,0.25);font-size:0.8rem;">—</span></td>
+                                <td>Closes the NeuroTrax AI agent</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:1.25rem; border-bottom:none;"><code>play_songs</code></td>
+                                <td style="border-bottom:none;"><span
+                                        style="color:rgba(255,255,255,0.25);font-size:0.8rem;">—</span></td>
+                                <td style="border-bottom:none;">Plays local MP3 files from the indexed audio library
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="doc-divider"></div>
+
+            <!-- EXECUTION LOGIC -->
+            <section class="doc-section" id="execution-logic">
+                <h2>Data Loading &amp; Execution Logic</h2>
+
+                <h3>Matching Priority</h3>
+                <div class="numbered-steps" style="margin-bottom:2.5rem">
+                    <div class="num-step">
+                        <div class="num-step-content">
+                            <h4>Exact Match</h4>
+                            <p>Checks <code>commands.json</code> and <code>learned.json</code> for a verbatim phrase
+                                match.</p>
+                        </div>
+                    </div>
+                    <div class="num-step">
+                        <div class="num-step-content">
+                            <h4>Intent Match</h4>
+                            <p>Checks <code>intents.json</code> using regex/fuzzy matching to extract arguments.</p>
+                        </div>
+                    </div>
+                    <div class="num-step">
+                        <div class="num-step-content">
+                            <h4>Fuzzy Fallback</h4>
+                            <p>Uses <code>fuzzywuzzy</code> to find the closest match across all indexed apps, files,
+                                and songs.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Execution</h3>
+                <ul class="step-list">
+                    <li>If a <strong>function name</strong> is found (e.g. <code>exit_program</code>), it is executed
+                        dynamically.</li>
+                    <li>If a <strong>file path</strong> is found, the file is opened with its default application.</li>
+                    <li>If a <strong>URL</strong> is found, it opens in the default browser.</li>
+                </ul>
+
+                <div
+                    style="margin-top:2rem;padding:1.25rem 1.5rem;background:rgba(129,140,248,0.06);border:1px solid rgba(129,140,248,0.15);border-radius:10px">
+                    <h4 style="color:var(--indigo);margin-bottom:0.4rem">Self-Learning</h4>
+                    <p style="margin-bottom:0;font-size:0.875rem">When you say <em>"no, I mean..."</em>, the correction
+                        is saved to <code>learned.json</code> and used in all future sessions automatically.</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer
+        style="text-align:center;padding:2rem 1.5rem;border-top:1px solid rgba(255,255,255,0.06);font-size:0.8rem;color:rgba(255,255,255,0.3);margin-left:260px">
+        <p>&copy; 2026 ZeroTraceX &nbsp;—&nbsp; NeuroTrax AI</p>
+        <p style="margin-top:0.4rem;display:flex;justify-content:center;gap:1rem;flex-wrap:wrap">
+            <a href="index.html" style="color:rgba(255,255,255,0.4);text-decoration:none">Home</a>
+            <span style="color:rgba(255,255,255,0.15)">|</span>
+            <a href="license.html" style="color:rgba(255,255,255,0.4);text-decoration:none">Open Source Credits</a>
+            <span style="color:rgba(255,255,255,0.15)">|</span>
+            <a href="license.html" style="color:rgba(255,255,255,0.4);text-decoration:none">MIT License</a>
+        </p>
+    </footer>
+
+    <script>
+        function setActive(el) {
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // Highlight sidebar link on scroll
+        const sections = document.querySelectorAll('.doc-section[id], section[id]');
+        const links = document.querySelectorAll('.sidebar-link');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const id = e.target.id;
+                    links.forEach(l => {
+                        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+                    });
+                }
+            });
+        }, { rootMargin: '-80px 0px -60% 0px' });
+
+        sections.forEach(s => observer.observe(s));
+    </script>
+
+</body>
+
+</html>
