@@ -37,6 +37,7 @@
             font-family: 'Inter', sans-serif;
             line-height: 1.7;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* ─── Top nav ─── */
@@ -143,6 +144,8 @@
             margin-left: var(--sidebar-w);
             flex: 1;
             max-width: 860px;
+            min-width: 0;
+            width: 100%;
             padding: 3rem 2.5rem 6rem;
         }
 
@@ -454,15 +457,137 @@
             font-size: 0.875rem;
         }
 
+        /* ─── Hamburger Button ─── */
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .nav-hamburger:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .nav-hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .nav-hamburger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .nav-hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-hamburger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* ─── Mobile Nav Overlay ─── */
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99;
+            background: rgba(3, 3, 3, 0.96);
+            backdrop-filter: blur(16px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .mobile-nav-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mobile-nav-overlay a {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .mobile-nav-overlay a:hover {
+            color: #fff;
+        }
+
         /* ─── Mobile ─── */
         @media(max-width: 768px) {
+            .topnav-links {
+                display: none;
+            }
+
+            .nav-hamburger {
+                display: flex;
+            }
+
+            .mobile-nav-overlay {
+                display: flex;
+            }
+
             .sidebar {
                 display: none;
             }
 
             .main {
                 margin-left: 0;
+                max-width: 100%;
+                width: 100%;
                 padding: 2rem 1.25rem 4rem;
+            }
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .doc-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .info-card {
+                padding: 1.25rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            pre {
+                font-size: 0.78rem;
+                padding: 1rem;
+            }
+
+            .fn-item {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .num-step {
+                flex-direction: column;
+                gap: 0.5rem;
             }
         }
     </style>
@@ -477,8 +602,34 @@
             <a href="index.html">Home</a>
             <a href="docs.html" class="active">Docs</a>
             <a href="license.html">License</a>
+            <a href="contact.html">Contact</a>
         </div>
+        <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <!-- Mobile Nav Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <a href="index.html" onclick="closeNav()">Home</a>
+        <a href="docs.html" onclick="closeNav()">Docs</a>
+        <a href="license.html" onclick="closeNav()">License</a>
+        <a href="contact.html" onclick="closeNav()">Contact</a>
+    </div>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            mobileNav.classList.toggle('open');
+            document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+        });
+        function closeNav() {
+            hamburger.classList.remove('open');
+            mobileNav.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+    </script>
 
     <div class="layout">
 
@@ -511,33 +662,113 @@
             <!-- GETTING STARTED -->
             <section class="doc-section" id="getting-started">
                 <h1><span class="h1-gradient">Getting Started</span></h1>
-                <p class="lead">Get up and running with NeuroTrax AI in seconds. No complex installation required.</p>
+                <p class="lead">Install and configure NeuroTrax AI in four simple steps — no extra
+                    dependencies needed.</p>
 
-                <div class="info-card">
-                    <h2 style="padding-top:0;margin-bottom:1.25rem">Download &amp; Run</h2>
-                    <p style="margin-bottom:1.5rem">Simply download the standalone executable. The AI agent runs locally
-                        on your machine — no Python, no dependencies.</p>
-
-                    <a href="AI.exe" download class="btn-download">
+                <!-- Download button -->
+                <div style="margin-bottom:2rem">
+                    <a href="Neurotrax_AI.exe" download class="btn-download">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" y1="15" x2="12" y2="3" />
                         </svg>
-                        Download Agent (AI.exe)
+                        Download NeuroTrax AI
                     </a>
-
-                    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08)">
-                        <h3>Once downloaded:</h3>
-                        <ul class="step-list" style="margin-top:0.75rem">
-                            <li>Double-click <code>AI.exe</code> to launch.</li>
-                            <li>Accept any Windows security prompts (run anyway) since this is a self-signed
-                                application.</li>
-                            <li>The floating UI will appear on your screen, ready for voice commands.</li>
-                        </ul>
-                    </div>
                 </div>
+
+                <!-- Steps -->
+                <div class="numbered-steps">
+
+                    <!-- Step 1 -->
+                    <div class="num-step">
+                        <div class="num-step-content">
+                            <h4>Download NeuroTrax AI</h4>
+                            <p>Click the download button above to get the latest <code>NeuroTrax_AI.exe</code>
+                                installer. It's a self-contained package — no additional dependencies
+                                required.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="num-step">
+                        <div class="num-step-content">
+                            <h4>Run it to auto-extract the folder</h4>
+                            <p>Double-click <code>NeuroTrax_AI.exe</code> to launch. It will automatically extract all
+                                necessary files into a local folder on your machine. Accept any Windows security prompts
+                                (<em>Run Anyway</em>) — this is a self-signed application.</p>
+
+                            <p style="margin-top:0.75rem">After extraction, the folder will contain:</p>
+                            <ul class="step-list" style="margin-top:0.5rem">
+                                <li><code>.env</code> — configuration file (user, settings)</li>
+                                <li><code>data/</code> — folder for all your JSON command &amp; data files</li>
+                                <li><code>AI.exe</code> — the main NeuroTrax AI application</li>
+                            </ul>
+
+                            <p style="margin-top:1rem">Open the extracted folder — you'll find the <code>.env</code>
+                                file, a
+                                <code>data/</code> folder, and <code>AI.exe</code>. <strong
+                                    style="color:rgba(255,255,255,0.85)">Configure the <code>.env</code> file
+                                    first</strong>
+                                (see Step 3 below), then double-click <code>AI.exe</code> to start the AI.
+                            </p>
+
+                            <div
+                                style="background:rgba(251,113,133,0.06);border:1px solid rgba(251,113,133,0.2);border-radius:8px;padding:0.85rem 1rem;font-size:0.82rem;color:rgba(255,200,200,0.75);margin-top:0.75rem;display:flex;gap:0.65rem;align-items:flex-start">
+                                <span style="font-size:1rem;flex-shrink:0">🔒</span>
+                                <span><strong style="color:rgba(255,255,255,0.85)">Firewall prompt on first
+                                        run:</strong>
+                                    Windows will ask for network access — click <strong style="color:#fff">Allow
+                                        access</strong> for <em>both</em> public and private networks. NeuroTrax needs
+                                    this for wake word detection and speech recognition.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="num-step">
+                        <div class="num-step-content">
+                            <h4>Configure the <code>.env</code> file <em
+                                    style="font-weight:400;color:rgba(255,255,255,0.45);font-size:0.85em">(do this
+                                    before running AI.exe)</em></h4>
+                            <p>Open the extracted folder and find the <code>.env</code> file. Edit it with any text
+                                editor (e.g. Notepad) and set the <code>user</code> field to whatever name you'd
+                                like NeuroTrax to use — it can be anything you prefer, such as your first name or
+                                a nickname.</p>
+
+                            <pre style="margin-top:1rem"><code><span class="json-comment"># .env — set your preferred name</span>
+<span class="json-key">user</span>=<span class="json-str">charan</span></code></pre>
+
+                            <div
+                                style="background:rgba(129,140,248,0.06);border:1px solid rgba(129,140,248,0.2);border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;color:rgba(200,210,255,0.75);margin-top:0.5rem">
+                                💡 This name is used for greetings and personalisation — it does <strong
+                                    style="color:#fff">not</strong> need to match your Windows account name.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="num-step">
+                        <div class="num-step-content">
+                            <h4>Add your data to the <code>data/</code> folder</h4>
+                            <p>The <code>data/</code> folder holds all JSON files that teach NeuroTrax about your apps,
+                                files, and custom commands. You can populate it in two ways:</p>
+                            <ul class="step-list" style="margin-top:0.75rem">
+                                <li>Run <code>Data_maker.exe</code> to automatically scan and index your system (apps,
+                                    files, audio).</li>
+                                <li>Manually edit <code>commands.json</code>, <code>intents.json</code>, and
+                                    <code>urls.json</code> to add custom commands.
+                                </li>
+                            </ul>
+                            <p style="margin-top:0.75rem">See the <a href="#data-structure"
+                                    style="color:var(--indigo)">Data Structure</a> section below for full details on
+                                each file.</p>
+                        </div>
+                    </div>
+
+                </div>
+
             </section>
 
             <div class="doc-divider"></div>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact – NeuroTrax AI</title>
+    <meta name="description"
+        content="Contact the NeuroTrax AI team for queries, bug reports, or suggestions. Reach us at zerotracex05@gmail.com." />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #030303;
+            --indigo: #818cf8;
+            --rose: #fb7185;
+            --emerald: #34d399;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ─── Nav ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(3, 3, 3, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--indigo), var(--rose));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #fff;
+        }
+
+        /* ─── Hamburger ─── */
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: background 0.2s;
+            z-index: 200;
+        }
+
+        .nav-hamburger:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .nav-hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .nav-hamburger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .nav-hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-hamburger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* ─── Mobile Overlay ─── */
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99;
+            background: rgba(3, 3, 3, 0.96);
+            backdrop-filter: blur(16px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .mobile-nav-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mobile-nav-overlay a {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .mobile-nav-overlay a:hover {
+            color: #fff;
+        }
+
+        /* ─── Page Hero ─── */
+        .page-hero {
+            padding: 10rem 1.5rem 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-glow {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 30% 50%, rgba(99, 102, 241, 0.07) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 40%, rgba(251, 113, 133, 0.06) 0%, transparent 55%);
+            pointer-events: none;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 1rem;
+            border-radius: 9999px;
+            background: rgba(129, 140, 248, 0.08);
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--indigo);
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-hero h1 {
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.75));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeUp 0.8s ease 0.1s both;
+        }
+
+        .page-hero p {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: rgba(255, 255, 255, 0.45);
+            max-width: 480px;
+            margin: 0 auto;
+            font-weight: 300;
+            animation: fadeUp 0.8s ease 0.2s both;
+        }
+
+        /* ─── Main container ─── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 1.5rem 6rem;
+        }
+
+        /* ─── Email card ─── */
+        .email-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.75rem;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.8s ease 0.3s both;
+        }
+
+        .email-card-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(129, 140, 248, 0.08), transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Animated orb */
+        .orb-wrap {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+        }
+
+        .orb-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1.5px solid rgba(165, 180, 252, 0.4);
+            animation: orb-pulse 2.6s ease-out infinite;
+        }
+
+        .orb-ring:nth-child(2) {
+            animation-delay: 0.7s;
+        }
+
+        .orb-ring:nth-child(3) {
+            animation-delay: 1.4s;
+        }
+
+        @keyframes orb-pulse {
+            0% {
+                transform: scale(0.85);
+                opacity: 0.9;
+            }
+
+            70% {
+                transform: scale(1.9);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1.9);
+                opacity: 0;
+            }
+        }
+
+        .orb-core {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.3), rgba(251, 113, 133, 0.2));
+            border: 1px solid rgba(165, 180, 252, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: orb-breathe 2.6s ease-in-out infinite;
+        }
+
+        @keyframes orb-breathe {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(165, 180, 252, 0.0);
+            }
+
+            50% {
+                box-shadow: 0 0 22px 6px rgba(165, 180, 252, 0.2);
+            }
+        }
+
+        .orb-core svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .email-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .email-card .sub {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 2rem;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .email-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.9rem 2.2rem;
+            border-radius: 9999px;
+            background: rgba(129, 140, 248, 0.12);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            color: #a5b4fc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background 0.22s, transform 0.2s, box-shadow 0.2s;
+            word-break: break-all;
+        }
+
+        .email-btn:hover {
+            background: rgba(129, 140, 248, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(129, 140, 248, 0.18);
+        }
+
+        .email-btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .email-address {
+            display: block;
+            margin-top: 1.25rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.02em;
+        }
+
+        /* ─── When / why cards ─── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.8s ease 0.45s both;
+        }
+
+        .why-card {
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .why-card:hover {
+            background: rgba(255, 255, 255, 0.045);
+            transform: translateY(-2px);
+        }
+
+        .why-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .why-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .why-card h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .why-card p {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.6;
+        }
+
+        /* ─── Notice banner ─── */
+        .notice {
+            background: rgba(251, 191, 36, 0.04);
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.55);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            animation: fadeUp 0.8s ease 0.55s both;
+        }
+
+        .notice svg {
+            width: 18px;
+            height: 18px;
+            color: #fbbf24;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.82rem;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        /* ─── Mobile ─── */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.85rem 1.25rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-hamburger {
+                display: flex;
+            }
+
+            .mobile-nav-overlay {
+                display: flex;
+            }
+
+            .page-hero {
+                padding: 8rem 1rem 3.5rem;
+            }
+
+            .container {
+                padding: 0 1rem 4rem;
+            }
+
+            .email-card {
+                padding: 2rem 1.25rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .email-btn {
+                font-size: 0.85rem;
+                padding: 0.8rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .email-btn {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Nav -->
+    <nav>
+        <a href="index.html" class="nav-logo">NeuroTrax AI</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="docs.html">Docs</a>
+            <a href="license.html">License</a>
+            <a href="contact.html" class="active">Contact</a>
+        </div>
+        <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Nav Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <a href="index.html" onclick="closeNav()">Home</a>
+        <a href="docs.html" onclick="closeNav()">Docs</a>
+        <a href="license.html" onclick="closeNav()">License</a>
+        <a href="contact.html" onclick="closeNav()">Contact</a>
+    </div>
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            mobileNav.classList.toggle('open');
+            document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+        });
+        function closeNav() {
+            hamburger.classList.remove('open');
+            mobileNav.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+    </script>
+
+    <!-- Hero -->
+    <div class="page-hero">
+        <div class="hero-glow"></div>
+        <div class="page-badge">Get in Touch</div>
+        <h1>Contact Us</h1>
+        <p>Have a question, found a bug, or want to share an idea? We're all ears.</p>
+    </div>
+
+    <!-- Content -->
+    <div class="container">
+
+        <!-- Email card -->
+        <div class="email-card">
+            <div class="email-card-glow"></div>
+
+            <!-- Animated orb icon -->
+            <div class="orb-wrap">
+                <div class="orb-ring"></div>
+                <div class="orb-ring"></div>
+                <div class="orb-ring"></div>
+                <div class="orb-core">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                </div>
+            </div>
+
+            <h2>Send us a message</h2>
+            <p class="sub">For any queries, doubts, or bug reports, reach out directly via email — we'll get back to you
+                as soon as possible.</p>
+
+            <a href="mailto:zerotracex05@gmail.com" class="email-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                </svg>
+                zerotracex05@gmail.com
+            </a>
+
+            <span class="email-address">Click to open in your default mail app</span>
+        </div>
+
+        <!-- Why contact grid -->
+        <div class="cards-grid">
+            <!-- Queries -->
+            <div class="why-card">
+                <div class="why-icon" style="background:rgba(129,140,248,0.15)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                </div>
+                <h3>General Queries</h3>
+                <p>Ask anything about how NeuroTrax works, its features, or how to set it up on your machine.</p>
+            </div>
+
+            <!-- Bug reports -->
+            <div class="why-card">
+                <div class="why-icon" style="background:rgba(251,113,133,0.15)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                </div>
+                <h3>Bug Reports</h3>
+                <p>Found something broken? Describe the issue and your system info and we'll investigate it.</p>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="why-card">
+                <div class="why-icon" style="background:rgba(52,211,153,0.15)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                </div>
+                <h3>Suggestions</h3>
+                <p>Have an idea for a new feature or improvement? We'd love to hear your thoughts.</p>
+            </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="notice">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>
+                <strong style="color:rgba(255,255,255,0.8)">Response time:</strong>
+                This is an independent project maintained by a solo developer. Responses may take a few days — your
+                patience is appreciated!
+            </span>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p style="margin-bottom:0.4rem">
+            <span
+                style="font-weight:700;background:linear-gradient(to right,#818cf8,#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">NeuroTrax
+                AI</span>
+        </p>
+        <p>© 2026 ZeroTraceX &nbsp;—&nbsp; Built by Zerotracex</p>
+        <p style="margin-top:0.6rem;display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap">
+            <a href="index.html">Home</a>
+            <span style="color:rgba(255,255,255,0.15)">|</span>
+            <a href="docs.html">Docs</a>
+            <span style="color:rgba(255,255,255,0.15)">|</span>
+            <a href="license.html">License</a>
+            <span style="color:rgba(255,255,255,0.15)">|</span>
+            <a href="contact.html">Contact</a>
+        </p>
+    </footer>
+
+</body>
+
+</html>
